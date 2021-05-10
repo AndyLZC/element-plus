@@ -253,20 +253,15 @@ export default defineComponent({
     }
 
     function itemInStage(item, index) {
+      if(!item.inState) return false
       const length = items.value.length
-      if (
-        (index === length - 1 && item.inStage && items.value[0].active) ||
-        (item.inStage &&
-          items.value[index + 1] &&
-          items.value[index + 1].active)
-      ) {
+      const prevItem = items.value[index - 1]
+      const nextItem = items.value[index + 1]
+      const lastItem = items.value[length - 1]
+      const firstItem = items.value[0]
+      if (nextItem?.active || (index === length - 1 && firstItem.active)) {
         return 'left'
-      } else if (
-        (index === 0 && item.inStage && items.value[length - 1].active) ||
-        (item.inStage &&
-          items.value[index - 1] &&
-          items.value[index - 1].active)
-      ) {
+      } else if (prevItem?.active || (index === 0 && lastItem.active)) {
         return 'right'
       }
       return false
